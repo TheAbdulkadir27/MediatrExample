@@ -14,17 +14,17 @@ namespace Application.CQRS.Admins
         public class AdminCreateCommanHandler : IRequestHandler<AdminCreateCommand, Admin>
         {
             private readonly IAdminService adminService;
-            private readonly Isha256 ısha256;
+            private readonly ICryPts Bcrypt;
             private readonly IMapper mapper;
-            public AdminCreateCommanHandler(IAdminService adminService, Isha256 ısha256, IMapper mapper)
+            public AdminCreateCommanHandler(IAdminService adminService, ICryPts _Bcrypt, IMapper mapper)
             {
                 this.adminService = adminService;
-                this.ısha256 = ısha256;
+                this.Bcrypt = _Bcrypt;
                 this.mapper = mapper;
             }
             public async Task<Admin> Handle(AdminCreateCommand request, CancellationToken cancellationToken)
             {
-                var pass = ısha256.ComputeSha256Hash(request.Admins.Password);
+                var pass = Bcrypt.Hasher(request.Admins.Password);
                 var model = mapper.Map<Admin>(request.Admins);
                 model.Password = pass;
                 adminService.AdminAdd(model);

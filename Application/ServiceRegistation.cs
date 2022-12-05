@@ -1,4 +1,5 @@
 ﻿using AdminKayıt;
+using Application.Common;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -11,7 +12,7 @@ namespace Application
             var assm = Assembly.GetExecutingAssembly();
             services.AddMediatR(assm);
             services.AddAutoMapper(assm);
-            services.AddScoped<Isha256, Sha256>();
+            services.AddScoped<ICryPts, BCrypts>();
         }
     }
 }

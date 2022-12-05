@@ -3,9 +3,9 @@ using System.Text;
 
 namespace AdminKayıt
 {
-    public class Sha256 : Isha256
+    public class Sha256 : ICryPts
     {
-        public string ComputeSha256Hash(string Password)
+        public string Hasher(string Password)
         {
             using (SHA256 sha256Hash = SHA256.Create())
             {

@@ -15,9 +15,9 @@ namespace Application.CQRS.Admins
         public class AdminUpdateCommandHandler : IRequestHandler<AdminUpdateCommand, Admin>
         {
             private readonly IMapper mapper;
-            private readonly Isha256 ısha256;
+            private readonly ICryPts ısha256;
             private readonly IAdminService adminService;
-            public AdminUpdateCommandHandler(IMapper mapper, Isha256 ısha256, IAdminService adminService)
+            public AdminUpdateCommandHandler(IMapper mapper, ICryPts ısha256, IAdminService adminService)
             {
                 this.mapper = mapper;
                 this.ısha256 = ısha256;
@@ -26,7 +26,7 @@ namespace Application.CQRS.Admins
             public async Task<Admin> Handle(AdminUpdateCommand request, CancellationToken cancellationToken)
             {
                 Admin admin = mapper.Map<Admin>(request.Admin);
-                admin.Password = ısha256.ComputeSha256Hash(admin.Password);
+                admin.Password = ısha256.Hasher(admin.Password);
                 return await Task.FromResult(adminService.AdminUpdate(admin));
             }
         }
