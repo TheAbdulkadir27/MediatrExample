@@ -10,6 +10,7 @@ namespace Application.CQRS.Book.Dto
             CreateMap<BookDto, Books>().ReverseMap();
             CreateMap<BookUpdateCommand, Books>().ReverseMap();
             CreateMap<BookAuthorDto, Writers>().ReverseMap();
+            CreateMap<BookCreateCommand, Books>().ReverseMap();
         }
     }
 }

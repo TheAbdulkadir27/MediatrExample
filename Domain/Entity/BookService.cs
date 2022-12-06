@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Common;
+using System;
+using System.Collections.Generic;
 
 namespace Domain.Entity
 {
@@ -8,5 +10,6 @@ namespace Domain.Entity
         bool BookDelete(Guid id);
         Books BookUpdate(Books books);
         Books BookGetById(Guid id);
+        List<Books> PageMaxAndMin(Specification<Books> specification);
     }
 }
