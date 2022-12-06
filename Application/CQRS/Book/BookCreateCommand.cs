@@ -1,5 +1,6 @@
 ﻿using Application.CQRS.Book.Dto;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entity;
 using MediatR;
 using System.Threading;
@@ -12,17 +13,19 @@ namespace Application.CQRS.Book
         public BookDto Books { get; set; }
         public class BookCreateCommandHandler : IRequestHandler<BookCreateCommand, Books>
         {
-            private readonly IBookService bookService;
+            private readonly IUnitOfWork unitOfWork;
             private readonly IMapper mapper;
-            public BookCreateCommandHandler(IBookService bookService, IMapper mapper)
+            public BookCreateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
-                this.bookService = bookService;
+                this.unitOfWork = unitOfWork;
                 this.mapper = mapper;
             }
             public async Task<Books> Handle(BookCreateCommand request, CancellationToken cancellationToken)
             {
                 var books = mapper.Map<Books>(request.Books);
-                return await Task.FromResult(bookService.BookAdd(books));
+                var value = unitOfWork.GetBookService().BookAdd(books);
+                unitOfWork.Commit();
+                return await Task.FromResult(value);
             }
         }
     }

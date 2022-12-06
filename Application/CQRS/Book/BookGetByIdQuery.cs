@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Threading;
@@ -11,14 +12,11 @@ namespace Application.CQRS.Book
         public Guid Id { get; set; }
         public class BookGetByIdQueryHandler : IRequestHandler<BookGetByIdQuery, Books>
         {
-            private readonly IBookService bookService;
-            public BookGetByIdQueryHandler(IBookService bookService)
-            {
-                this.bookService = bookService;
-            }
+            private readonly IUnitOfWork unitOfWork;
+            public BookGetByIdQueryHandler(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
             public Task<Books> Handle(BookGetByIdQuery request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(bookService.BookGetById(request.Id));
+                return Task.FromResult(unitOfWork.GetBookService().BookGetById(request.Id));
             }
         }
     }

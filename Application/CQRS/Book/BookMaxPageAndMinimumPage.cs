@@ -12,11 +12,12 @@ namespace Application.CQRS.Book
         public int MinPage { get; set; }
         public class BookPage400_Or_Higher : IRequestHandler<BookMaxPageAndMinimumPage, Books[]>
         {
-            private readonly IBookService _bookService;
-            public BookPage400_Or_Higher(IBookService bookService) => _bookService = bookService;
+            private readonly IUnitOfWork unitOfWork;
+            public BookPage400_Or_Higher(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
             public async Task<Books[]> Handle(BookMaxPageAndMinimumPage request, CancellationToken cancellationToken)
             {
-                return await Task.FromResult(_bookService.PageMaxAndMin(new MaxPageAndMinumumPage(request.MaxPage, request.MinPage)).ToArray());
+                var value = unitOfWork.GetBookService().PageMaxAndMin(new MaxPageAndMinumumPage(request.MaxPage, request.MinPage));
+                return await Task.FromResult(value.ToArray());
             }
         }
     }

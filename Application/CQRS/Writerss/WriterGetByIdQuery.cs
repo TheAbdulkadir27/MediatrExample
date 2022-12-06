@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace Application.CQRS.Writerss
         public Guid İd { get; set; }
         public class WriterGetByIdQueryHandler : IRequestHandler<WriterGetByIdQuery, Writers>
         {
-            private readonly IWritersService writersService;
-            public WriterGetByIdQueryHandler(IWritersService writersService) => this.writersService = writersService;
+            private readonly IUnitOfWork unitOfWork;
+
+            public WriterGetByIdQueryHandler(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
+
             public async Task<Writers> Handle(WriterGetByIdQuery request, CancellationToken cancellationToken)
             {
-                return await Task.FromResult(writersService.GetById(request.İd));
+                return await Task.FromResult(unitOfWork.GetWriterService().GetById(request.İd));
             }
         }
     }

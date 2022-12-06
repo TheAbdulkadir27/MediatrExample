@@ -1,4 +1,6 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
+using Infrastucture.Common;
 using Infrastucture.Context;
 using Infrastucture.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ namespace Infrastucture
             services.AddScoped<IBookService, BookRepository>();
             services.AddScoped<ICategoryService, CategoryRepository>();
             services.AddScoped<IWritersService, WriterRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

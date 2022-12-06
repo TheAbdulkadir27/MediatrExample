@@ -1,5 +1,6 @@
 ﻿using Application.CQRS.Writerss.Dto;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entity;
 using MediatR;
 using System;
@@ -15,18 +16,20 @@ namespace Application.CQRS.Writerss
         public WritersDto Dto { get; set; }
         public class WriterCreateCommandHandler : IRequestHandler<WriterCreateCommand, Writers>
         {
-            private readonly IWritersService writersService;
+            private readonly IUnitOfWork _UnitOfWORK;
             private readonly IMapper mapper;
-            public WriterCreateCommandHandler(IWritersService writersService, IMapper mapper)
+            public WriterCreateCommandHandler(IUnitOfWork writersService, IMapper mapper)
             {
-                this.writersService = writersService;
+                this._UnitOfWORK = writersService;
                 this.mapper = mapper;
             }
             public async Task<Writers> Handle(WriterCreateCommand request, CancellationToken cancellationToken)
             {
                 request.Dto.Id = Guid.NewGuid();
                 var s = mapper.Map<Writers>(request.Dto);
-                return await Task.FromResult(writersService.AddWriters(s));
+                var value = _UnitOfWORK.GetWriterService().AddWriters(s);
+                _UnitOfWORK.Commit();
+                return await Task.FromResult(value);
             }
         }
     }

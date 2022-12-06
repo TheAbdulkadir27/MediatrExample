@@ -12,16 +12,12 @@ namespace Infrastucture.Repository
         public Writers AddWriters(Writers writers)
         {
             dataContext.Set<Writers>().Add(writers);
-            if (dataContext.SaveChanges() > 0)
-                return writers;
-            return null;
+            return writers;
         }
         public bool DeleteWriters(Guid id)
         {
             dataContext.Remove(id);
-            if (dataContext.SaveChanges() > 0)
-                return true;
-            return false;
+            return true;
         }
         public Writers GetById(Guid id)
         {
@@ -30,7 +26,6 @@ namespace Infrastucture.Repository
         public Writers UpdateWriters(Writers writers)
         {
             dataContext.Entry(writers).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            dataContext.SaveChanges();
             return writers;
         }
     }

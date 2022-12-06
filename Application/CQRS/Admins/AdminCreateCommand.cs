@@ -1,6 +1,7 @@
 ﻿using AdminKayıt;
 using Application.CQRS.Admins.Dto;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entity;
 using MediatR;
 using System.Threading;
@@ -13,21 +14,24 @@ namespace Application.CQRS.Admins
         public AdminDto Admins { get; set; }
         public class AdminCreateCommanHandler : IRequestHandler<AdminCreateCommand, Admin>
         {
-            private readonly IAdminService adminService;
+            private readonly IUnitOfWork unitOfWork;
             private readonly ICryPts Bcrypt;
             private readonly IMapper mapper;
-            public AdminCreateCommanHandler(IAdminService adminService, ICryPts _Bcrypt, IMapper mapper)
+
+            public AdminCreateCommanHandler(IUnitOfWork unitOfWork, ICryPts bcrypt, IMapper mapper)
             {
-                this.adminService = adminService;
-                this.Bcrypt = _Bcrypt;
+                this.unitOfWork = unitOfWork;
+                Bcrypt = bcrypt;
                 this.mapper = mapper;
             }
+
             public async Task<Admin> Handle(AdminCreateCommand request, CancellationToken cancellationToken)
             {
                 var pass = Bcrypt.Hasher(request.Admins.Password);
                 var model = mapper.Map<Admin>(request.Admins);
                 model.Password = pass;
-                adminService.AdminAdd(model);
+                unitOfWork.GetAdminService().AdminAdd(model);
+                unitOfWork.Commit();
                 return await Task.FromResult(model);
             }
         }

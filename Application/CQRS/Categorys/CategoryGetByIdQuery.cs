@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Threading;
@@ -11,11 +12,11 @@ namespace Application.CQRS.Categorys
         public Guid Id { get; set; }
         public class CategoryGetByIdQueryHandler : IRequestHandler<CategoryGetByIdQuery, Category>
         {
-            private readonly ICategoryService categoryService;
-            public CategoryGetByIdQueryHandler(ICategoryService categoryService) => this.categoryService = categoryService;
+            private readonly IUnitOfWork unitOfWork;
+            public CategoryGetByIdQueryHandler(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
             public async Task<Category> Handle(CategoryGetByIdQuery request, CancellationToken cancellationToken)
             {
-                return await Task.FromResult(categoryService.GetById(request.Id));
+                return await Task.FromResult(unitOfWork.GetCategoryService().GetById(request.Id));
             }
         }
     }

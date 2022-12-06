@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Threading;
@@ -10,14 +11,13 @@ namespace Application.CQRS.Writerss
         public Guid Id { get; set; }
         public class WriterDeleteCommandHandler : IRequestHandler<WriterDeleteCommand, bool>
         {
-            private readonly IWritersService writersService;
-            public WriterDeleteCommandHandler(IWritersService writersService)
-            {
-                this.writersService = writersService;
-            }
+            private readonly IUnitOfWork _UnitOfWork;
+            public WriterDeleteCommandHandler(IUnitOfWork unitOfWork) => _UnitOfWork = unitOfWork;
             public async Task<bool> Handle(WriterDeleteCommand request, CancellationToken cancellationToken)
             {
-                return await Task.FromResult(writersService.DeleteWriters(request.Id));
+                var value = _UnitOfWork.GetWriterService().DeleteWriters(request.Id);
+                _UnitOfWork.Commit();
+                return await Task.FromResult(value);
             }
         }
     }

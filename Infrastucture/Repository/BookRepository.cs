@@ -18,21 +18,17 @@ namespace Infrastucture.Repository
         public Books BookAdd(Books books)
         {
             dataContext.Set<Books>().Add(books);
-            dataContext.SaveChanges();
             return books;
         }
         public bool BookDelete(Guid id)
         {
             dataContext.Books.Remove(BookGetById(id));
-            if (dataContext.SaveChanges() > 0)
-                return true;
-            return false;
+            return true;
         }
 
         public Books BookUpdate(Books book)
         {
             dataContext.Set<Books>().Update(book);
-            dataContext.SaveChanges();
             return book;
         }
         public Books BookGetById(Guid id)

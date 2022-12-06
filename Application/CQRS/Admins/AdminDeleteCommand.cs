@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Threading;
@@ -11,14 +12,14 @@ namespace Application.CQRS.Admins
         public Guid Id { get; set; }
         public class AdminDeleteCommandHandler : IRequestHandler<AdminDeleteCommand, bool>
         {
-            private readonly IAdminService adminService;
-            public AdminDeleteCommandHandler(IAdminService adminService)
-            {
-                this.adminService = adminService;
-            }
+            private readonly IUnitOfWork unitOfWork;
+            public AdminDeleteCommandHandler(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
+
             public Task<bool> Handle(AdminDeleteCommand request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(adminService.AdminDelete(request.Id));
+                var value = Task.FromResult(unitOfWork.GetAdminService().AdminDelete(request.Id));
+                unitOfWork.Commit();
+                return value;
             }
         }
     }

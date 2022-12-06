@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Threading;
@@ -11,9 +12,15 @@ namespace Application.CQRS.Admins
         public Guid İd { get; set; }
         public class AdminGetByIdQueryHandler : IRequestHandler<AdminGetByIdQuery, Admin>
         {
-            private readonly IAdminService adminService;
-            public AdminGetByIdQueryHandler(IAdminService adminService) => this.adminService = adminService;
-            public Task<Admin> Handle(AdminGetByIdQuery request, CancellationToken cancellationToken) => Task.FromResult(adminService.GetById(request.İd));
+            private readonly IUnitOfWork UnitOfWork;
+            public AdminGetByIdQueryHandler(IUnitOfWork unitOfWork)
+            {
+                UnitOfWork = unitOfWork;
+            }
+            public Task<Admin> Handle(AdminGetByIdQuery request, CancellationToken cancellationToken)
+            {
+                return Task.FromResult(UnitOfWork.GetAdminService().GetById(request.İd));
+            }
         }
     }
 }

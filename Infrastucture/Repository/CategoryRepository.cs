@@ -11,21 +11,17 @@ namespace Infrastucture.Repository
         public Category Add(Category category)
         {
             dataContext.Entry(category).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-            dataContext.SaveChanges();
             return category;
         }
         public bool Delete(Guid id)
         {
             dataContext.Categories.Remove(GetById(id));
-            if (dataContext.SaveChanges() > 0)
-                return true;
-            return false;
+            return true;
         }
         public Category GetById(Guid id) => dataContext.Categories.SingleOrDefault(v => v.Id == id);
         public Category Update(Category category)
         {
             dataContext.Entry(category).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            dataContext.SaveChanges();
             return category;
         }
     }

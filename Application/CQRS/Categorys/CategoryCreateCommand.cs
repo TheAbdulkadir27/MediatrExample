@@ -1,5 +1,6 @@
 ﻿using Application.CQRS.Categorys.Dto;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entity;
 using MediatR;
 using System;
@@ -14,18 +15,20 @@ namespace Application.CQRS.Categorys
         public class CategoryCreateCommandHandler : IRequestHandler<CategoryCreateCommand, Category>
         {
             private readonly IMapper mapper;
-            private readonly ICategoryService categoryService;
-            public CategoryCreateCommandHandler(IMapper mapper, ICategoryService categoryService)
+            private readonly IUnitOfWork unitOfWork;
+            public CategoryCreateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
             {
                 this.mapper = mapper;
-                this.categoryService = categoryService;
+                this.unitOfWork = unitOfWork;
             }
             public async Task<Category> Handle(CategoryCreateCommand request, CancellationToken cancellationToken)
             {
                 if (request.Dto.Id == Guid.Empty)
                     request.Dto.Id = Guid.NewGuid();
                 var s = mapper.Map<Category>(request.Dto);
-                return await Task.FromResult(categoryService.Add(s));
+                var sa = unitOfWork.GetCategoryService().Add(s);
+                unitOfWork.Commit();
+                return await Task.FromResult(sa);
             }
         }
     }

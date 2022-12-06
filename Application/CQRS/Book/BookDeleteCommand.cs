@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Domain.Common;
+using Domain.Entity;
 using MediatR;
 using System;
 using System.Threading;
@@ -11,11 +12,13 @@ namespace Application.CQRS.Book
         public Guid Id { get; set; }
         public class BookDeleteCommandHandler : IRequestHandler<BookDeleteCommand, bool>
         {
-            private readonly IBookService bookService;
-            public BookDeleteCommandHandler(IBookService bookService) => this.bookService = bookService;
+            private readonly IUnitOfWork unitOfWork;
+            public BookDeleteCommandHandler(IUnitOfWork unitOfWork) => this.unitOfWork = unitOfWork;
             public Task<bool> Handle(BookDeleteCommand request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(bookService.BookDelete(request.Id));
+                var Result = unitOfWork.GetBookService().BookDelete(request.Id);
+                unitOfWork.Commit();
+                return Task.FromResult(Result);
             }
         }
     }
