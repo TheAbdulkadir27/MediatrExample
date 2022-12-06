@@ -34,11 +34,16 @@ namespace Api.Controllers
         {
             return await mediator.Send(new AdminDeleteCommand() { Id = id });
         }
-
         [HttpPut]
         public async Task<Admin> UpdateAdmin(AdminUpdateCommand admin)
         {
             return await mediator.Send(admin);
+        }
+        [HttpPut("Search")]
+        //[Route("api/[controller]/Search")]
+        public async Task<Admin[]> Search(AdminSearchQuery Search)
+        {
+            return await mediator.Send(Search);
         }
     }
 }

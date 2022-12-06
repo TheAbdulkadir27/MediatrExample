@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Common;
+using System;
 using System.Threading.Tasks;
 
 namespace Domain.Entity
@@ -9,5 +10,6 @@ namespace Domain.Entity
         bool AdminDelete(Guid id);
         Admin AdminUpdate(Admin admin);
         Admin GetById(Guid İd);
+        Admin[] Search(Specification<Admin> specification, Pagition page);
     }
 }

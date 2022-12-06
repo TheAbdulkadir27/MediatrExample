@@ -39,13 +39,17 @@ namespace Api.Controllers
         {
             return await mediator.Send(bookUpdate);
         }
-
-
         [HttpPost]
         [Route("api/[controller]/MaxAndMinPage")]
         public async Task<Books[]> MaxAndMinPage(int max, int min)
         {
             return await mediator.Send(new BookMaxPageAndMinimumPage() { MaxPage = max, MinPage = min });
+        }
+        [HttpPost]
+        [Route("api/[controller]/SearchInBookCategory")]
+        public async Task<Books[]> SearchInBookCategory(Guid CategoryId)
+        {
+            return await mediator.Send(new BookGetByCategory() { CategoryId = CategoryId });
         }
     }
 }
