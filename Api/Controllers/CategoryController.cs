@@ -1,4 +1,5 @@
 ﻿using Application.CQRS.Categorys;
+using Domain.Common;
 using Domain.Entity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,10 @@ namespace Api.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IMediator mediator;
-        public CategoryController(IMediator mediator) => this.mediator = mediator;
-
+        public CategoryController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
         [HttpGet("{id}")]
         public async Task<Category> GetById(Guid id)
         {

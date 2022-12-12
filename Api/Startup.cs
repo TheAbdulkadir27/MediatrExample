@@ -35,6 +35,7 @@ namespace Api
             services.AddPersistenceRegistration();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMemoryCache();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("SwaggerApi", new OpenApiInfo
@@ -55,7 +56,6 @@ namespace Api
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
