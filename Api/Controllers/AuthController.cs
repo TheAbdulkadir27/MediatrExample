@@ -34,7 +34,9 @@ namespace JwtTokenBaşla.Controllers
             }
             var user = await userManager.FindByNameAsync(Model.UserName);
             if (user == null)
+            {
                 return BadRequest(new { message = "Email İs incorrect" });
+            }
             var result = await signInManager.CheckPasswordSignInAsync(user, Model.Password, false);
             if (result.Succeeded)
             {
