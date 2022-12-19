@@ -1,12 +1,14 @@
 ﻿using Application.CQRS.Writerss;
 using Domain.Entity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class WritersController : ControllerBase
